@@ -1,6 +1,7 @@
 //Clear canvas
-let ctx = null, canvas = null;
-
+function clearCanvas(ctx, canvas) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
 
 function sierpinskiTriangle(ctx, pos, length, iteration) {
 
@@ -25,8 +26,6 @@ function sierpinskiTriangle(ctx, pos, length, iteration) {
   }
 }
 
-
-
 function drawTriangles(ctx, pos, length) {
   //Color picker
   color = getRandomColor();
@@ -42,7 +41,9 @@ function drawTriangles(ctx, pos, length) {
   ctx.lineTo(pos[0] + length, pos[1]);
   //Right bottom to left bottom
   ctx.lineTo(...pos);
+  ctx.closePath();
   ctx.fill();
+
 
 }
 function getRandomColor() {
@@ -53,8 +54,6 @@ function getRandomColor() {
   }
   return color;
 }
-
-
 
 function main() {
   //Create Canvas
@@ -73,7 +72,14 @@ function main() {
   var output = document.getElementById("value");
   output.innerHTML = slider.value;
 
+  //Base
+  sierpinskiTriangle(ctx, [dw, dh], length, 0);
 
-  sierpinskiTriangle(ctx, [dw, dh], length, 1);
+  //Slider value event
+  slider.oninput = function () {
+    output.innerHTML = this.value;
+    clearCanvas(ctx, canvas);
+    sierpinskiTriangle(ctx, [dw, dh], length, this.value);
+  }
 }
 main()
